@@ -1,5 +1,5 @@
-# Это workflow будет строить проект .NET
-# Для получения дополнительной информации см.: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
 name: build and test
 
@@ -20,11 +20,11 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Перейти в директорию решения
+    - name: Navigate to solution directory
       run: cd HRDepartment.Domain
-    - name: Восстановить зависимости
+    - name: Restore dependencies
       run: dotnet restore
-    - name: Построить
+    - name: Build
       run: dotnet build --no-restore
-    - name: Тест
+    - name: Test
       run: dotnet test HRDepartment.Domain.UnitTest/HRDepartment.Domain.UnitTest.csproj --no-build --verbosity normal
