@@ -1,3 +1,6 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
 name: build and test
 
 on:
@@ -18,8 +21,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore HRDepartment.Domain.sln
+      run: dotnet restore
     - name: Build
-      run: dotnet build HRDepartment.Domain/HRDepartment.Domain.csproj
+      run: dotnet build --no-restore
     - name: Test
-      run: dotnet test HRDepartment.Domain.UnitTest/HRDepartment.Domain.UnitTest.csproj --no-build --verbosity normal
+      run: dotnet test HRDepartment.Domain/HRDepartment.Domain.UnitTest/HRDepartment.Domain.UnitTest.csproj --no-build --verbosity normal
