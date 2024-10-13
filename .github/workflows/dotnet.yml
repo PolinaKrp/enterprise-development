@@ -21,8 +21,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore HRDepartment.Domain/HRDepartment.Domain.sln
-    - name: Build
-      run: dotnet build HRDepartment.Domain/HRDepartment.Domain.sln --no-restore
+      run: dotnet restore HRDepartment.Domain/HRDepartment.Domain.UnitTest/HRDepartment.Domain.UnitTest.csproj
+    - name: Build main project
+      run: dotnet build HRDepartment.Domain/HRDepartment.Domain/HRDepartment.Domain.csproj --no-restore
+    - name: Build test project
+      run: dotnet build HRDepartment.Domain/HRDepartment.Domain.UnitTest/HRDepartment.Domain.UnitTest.csproj --no-restore
     - name: Test
       run: dotnet test HRDepartment.Domain/HRDepartment.Domain.UnitTest/HRDepartment.Domain.UnitTest.csproj --no-build --verbosity normal
