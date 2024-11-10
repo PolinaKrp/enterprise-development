@@ -62,16 +62,14 @@ public class HRDepartmentTest : IClassFixture<HRDepartmentData>
             })
             .ToList();
 
-        Assert.Equal(2, thirdQuery.Count);
-
+        Assert.Equal(3, thirdQuery.Count);
         var regNumbers = thirdQuery.Select(q => q.RegNumber).ToList();
-
-        Assert.False(regNumbers.Contains("1234")); // Иванов
-        Assert.False(regNumbers.Contains("1324")); // Петров
-        Assert.True(regNumbers.Contains("1423"));  // Воронова
-        Assert.False(regNumbers.Contains("1425"));  // Сидоров
-        Assert.True(regNumbers.Contains("1243"));  // Кошмал 
+        Assert.False(regNumbers.Contains("1234"));
+        Assert.False(regNumbers.Contains("1324"));
+        Assert.True(regNumbers.Contains("1423"));
+        Assert.True(regNumbers.Contains("1243"));
     }
+
     /// <summary>
     /// 4. Тестирует вывод среднего возраста сотрудников в каждом отделе
     /// </summary>
@@ -79,7 +77,6 @@ public class HRDepartmentTest : IClassFixture<HRDepartmentData>
     public void TestMiddleAgeConclusion()
     {
         var employees = _fixture.EmployeeWithDepartmentFilledFixture;
-
         var fourthQuery =
             (from employee in employees
              from employeePosition in employee.EmployeePositions
@@ -88,7 +85,8 @@ public class HRDepartmentTest : IClassFixture<HRDepartmentData>
              {
                  EmployeeAge = employee.GetAge(),
                  DepartmentId = employeePosition.Position.DepartmentId
-             })
+             }
+             )
             .GroupBy(tuple => tuple.DepartmentId)
             .Select(grp => new
             {
@@ -96,9 +94,8 @@ public class HRDepartmentTest : IClassFixture<HRDepartmentData>
                 DepartmentId = grp.Key
             })
             .ToList();
-
         Assert.All(fourthQuery, x => Assert.True(x.AverageAge >= 0));
-        Assert.True(fourthQuery.Count >= 2);
+        Assert.Equal(2, fourthQuery.Count);
     }
 
     /// <summary>
@@ -127,29 +124,29 @@ public class HRDepartmentTest : IClassFixture<HRDepartmentData>
     /// <summary>
     /// 6. Тестирует вывод топ 5 сотрудников, имеющих наибольших стаж работы на предприятии
     /// </summary>
-        [Fact]
+    [Fact]
     public void TestTop5Employees()
     {
         var employeesWithWorkExperience = _fixture.EmployeePosition
-            .Select(e => new
-            {
-                e.Employee.RegNumber,
-                e.EmploymentDate,
-                DismissalDate = e.RetirementDate ?? DateTime.Now,
-                e.Employee.FirstName,
-                e.Employee.LastName
-            })
-            .GroupBy(e => new { e.RegNumber, e.FirstName, e.LastName })
-            .Select(g => new
-            {
-                g.Key.RegNumber,
-                g.Key.FirstName,
-                g.Key.LastName,
-                WorkExperience = g.Sum(e => (e.DismissalDate - e.EmploymentDate).TotalDays / 365)
-            })
-            .OrderByDescending(e => e.WorkExperience)
-            .Take(5)
-            .ToList();
+    .Select(e => new
+    {
+        e.Employee.RegNumber,
+        e.EmploymentDate,
+        DismissalDate = e.RetirementDate ?? DateTime.Now,
+        e.Employee.FirstName,
+        e.Employee.LastName
+    })
+    .GroupBy(e => new { e.RegNumber, e.FirstName, e.LastName })
+    .Select(g => new
+    {
+        g.Key.RegNumber,
+        g.Key.FirstName,
+        g.Key.LastName,
+        WorkExperience = g.Sum(e => (e.DismissalDate - e.EmploymentDate).TotalDays / 365)
+    })
+    .OrderByDescending(e => e.WorkExperience)
+    .Take(5)
+    .ToList();
 
         Assert.Equal(5, employeesWithWorkExperience.Count);
         Assert.True(employeesWithWorkExperience[0].WorkExperience > 23);
@@ -157,12 +154,10 @@ public class HRDepartmentTest : IClassFixture<HRDepartmentData>
         Assert.True(employeesWithWorkExperience[2].WorkExperience > 16);
         Assert.True(employeesWithWorkExperience[3].WorkExperience > 4);
         Assert.True(employeesWithWorkExperience[4].WorkExperience > 3);
-
-        // Обновите ожидаемые значения в зависимости от фактического порядка сотрудников
-        Assert.Equal("1243", employeesWithWorkExperience[0].RegNumber.ToString()); // Кошмал
-        Assert.Equal("1423", employeesWithWorkExperience[1].RegNumber.ToString()); // Воронова
-        Assert.Equal("1234", employeesWithWorkExperience[2].RegNumber.ToString()); // Иванов
-        Assert.Equal("1425", employeesWithWorkExperience[3].RegNumber.ToString()); // Сидоров
-        Assert.Equal("1324", employeesWithWorkExperience[4].RegNumber.ToString()); // Петров
+        Assert.Equal("1423", employeesWithWorkExperience[0].RegNumber.ToString());
+        Assert.Equal("1234", employeesWithWorkExperience[1].RegNumber.ToString());
+        Assert.Equal("1243", employeesWithWorkExperience[2].RegNumber.ToString());
+        Assert.Equal("1425", employeesWithWorkExperience[3].RegNumber.ToString());
+        Assert.Equal("1324", employeesWithWorkExperience[4].RegNumber.ToString());
     }
 }

@@ -65,8 +65,6 @@ public class EmployeeRepository : IRepository<Employee>
         oldValue.MaritalStatus = employee.MaritalStatus;
         oldValue.EmployeePositions = employee.EmployeePositions;
         oldValue.EmployeeBenefits = employee.EmployeeBenefits;
-        oldValue.DepartmentId = employee.DepartmentId;
-        oldValue.Department = employee.Department;
 
         return true;
     }

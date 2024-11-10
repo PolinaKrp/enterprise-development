@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HRDepartment.Domain;
 using HRDepartment.Domain.Model;
 
 namespace HRDepartment.Domain.UnitTest;
@@ -340,78 +341,78 @@ public class HRDepartmentData
                 EmploymentDate = new DateTime(2000, 1, 27),
                 RetirementDate = null
             },
-                new EmployeePosition
-                {
-                    Id = 2,
-                    EmployeeId = employeeList[2].Id,
-                    Employee = employeeList[2],
-                    PositionId = positionList[4].Id,
-                    Position = positionList[4],
-                    EmploymentDate = new DateTime(1998, 3, 20),
-                    RetirementDate = new DateTime(2010, 5, 23)
-                },
-                new EmployeePosition
-                {
-                    Id = 3,
-                    EmployeeId = employeeList[2].Id,
-                    Employee = employeeList[2],
-                    PositionId = positionList[1].Id,
-                    Position = positionList[1],
-                    EmploymentDate = new DateTime(2010, 5, 24),
-                    RetirementDate = null
-                },
-                new EmployeePosition
-                {
-                    Id = 4,
-                    EmployeeId = employeeList[1].Id,
-                    Employee = employeeList[1],
-                    PositionId = positionList[2].Id,
-                    Position = positionList[2],
-                    EmploymentDate = new DateTime(2018, 8, 7),
-                    RetirementDate = null
-                },
-                new EmployeePosition
-                {
-                    Id = 5,
-                    EmployeeId = employeeList[3].Id,
-                    Employee = employeeList[3],
-                    PositionId = positionList[1].Id,
-                    Position = positionList[1],
-                    EmploymentDate = new DateTime(2000, 9, 10),
-                    RetirementDate = new DateTime(2011, 11, 11)
-                },
-                new EmployeePosition
-                {
-                    Id = 6,
-                    EmployeeId = employeeList[3].Id,
-                    Employee = employeeList[3],
-                    PositionId = positionList[3].Id,
-                    Position = positionList[3],
-                    EmploymentDate = new DateTime(2011, 11, 12),
-                    RetirementDate = null//new DateTime(2016, 3, 24)
-                },
-                new EmployeePosition
-                {
-                    Id = 7,
-                    EmployeeId = employeeList[3].Id,
-                    Employee = employeeList[3],
-                    PositionId = positionList[4].Id,
-                    Position = positionList[4],
-                    EmploymentDate = new DateTime(2016, 3, 25),
-                    RetirementDate = null
-                },
-                new EmployeePosition
-                {
-                    Id = 8,
-                    EmployeeId = employeeList[4].Id,
-                    Employee = employeeList[4],
-                    PositionId = positionList[2].Id,
-                    Position = positionList[2],
-                    EmploymentDate = new DateTime(2005, 1, 1),
-                    RetirementDate = null
-                }
-            };
-        employeeList[0].EmployeePositions.Add(employeePositionList[0]);
+            new EmployeePosition
+            {
+                Id = 2,
+                EmployeeId = employeeList[2].Id,
+                Employee = employeeList[2],
+                PositionId = positionList[4].Id,
+                Position = positionList[4],
+                EmploymentDate = new DateTime(1998, 3, 20),
+                RetirementDate = new DateTime(2010, 5, 23)
+            },
+            new EmployeePosition
+            {
+                Id = 3,
+                EmployeeId = employeeList[2].Id,
+                Employee = employeeList[2],
+                PositionId = positionList[1].Id,
+                Position = positionList[1],
+                EmploymentDate = new DateTime(2010, 5, 24),
+                RetirementDate = null
+            },
+            new EmployeePosition
+            {
+                Id = 4,
+                EmployeeId = employeeList[1].Id,
+                Employee = employeeList[1],
+                PositionId = positionList[2].Id,
+                Position = positionList[2],
+                EmploymentDate = new DateTime(2018, 8, 7),
+                RetirementDate = null
+            },
+            new EmployeePosition
+            {
+                Id = 5,
+                EmployeeId = employeeList[3].Id,
+                Employee = employeeList[3],
+                PositionId = positionList[1].Id,
+                Position = positionList[1],
+                EmploymentDate = new DateTime(2000, 9, 10),
+                RetirementDate = new DateTime(2011, 11, 11)
+            },
+            new EmployeePosition
+            {
+                Id = 6,
+                EmployeeId = employeeList[3].Id,
+                Employee = employeeList[3],
+                PositionId = positionList[3].Id,
+                Position = positionList[3],
+                EmploymentDate = new DateTime(2011, 11, 12),
+                RetirementDate = new DateTime(2016, 3, 24)
+            },
+            new EmployeePosition
+            {
+                Id = 7,
+                EmployeeId = employeeList[3].Id,
+                Employee = employeeList[3],
+                PositionId = positionList[4].Id,
+                Position = positionList[4],
+                EmploymentDate = new DateTime(2016, 3, 25),
+                RetirementDate = null
+            },
+            new EmployeePosition
+            {
+                Id = 8,
+                EmployeeId = employeeList[4].Id,
+                Employee = employeeList[4],
+                PositionId = positionList[2].Id,
+                Position = positionList[2],
+                EmploymentDate = new DateTime(2005, 1, 1),
+                RetirementDate = null
+            }
+        };
+            employeeList[0].EmployeePositions.Add(employeePositionList[0]);
             employeeList[2].EmployeePositions.Add(employeePositionList[1]);
             employeeList[2].EmployeePositions.Add(employeePositionList[2]);
             employeeList[1].EmployeePositions.Add(employeePositionList[3]);
@@ -434,56 +435,61 @@ public class HRDepartmentData
     {
         get
         {
-            var departmentList = Department; // Получаем список отделов
-            var employees = EmployeeOnlyWorkshopFilledFixture; // Получаем список сотрудников
-            var positionList = Position; // Получаем список должностей
-            var employeePositionList = new List<EmployeePosition>(); // Инициализируем список EmployeePosition
-
-            // Пример назначения сотрудников в отделы на основе их индексов
-            for (int i = 0; i < employees.Count; i++)
+            var departmentList = Department;
+            var employees = EmployeeOnlyWorkshopFilledFixture;
+            var positionList = Position;
+            var employeePositionList = new List<EmployeePosition>
+        {
+            new EmployeePosition
             {
-                var employeePosition = new EmployeePosition
-                {
-                    Id = i + 1,
-                    EmployeeId = employees[i].Id,
-                    Employee = employees[i],
-                    PositionId = positionList[i % positionList.Count].Id, // Назначаем должность по кругу
-                    Position = positionList[i % positionList.Count],
-                    EmploymentDate = DateTime.Now,
-                    RetirementDate = null
-                };
-
-                employeePositionList.Add(employeePosition); // Добавляем позицию в список
-
-                // Назначаем сотрудника в отдел (например, по индексу)
-                if (i < departmentList.Count)
-                {
-                    employees[i].DepartmentId = departmentList[i].Id; // Назначаем отдел сотруднику
-                    employees[i].Department = departmentList[i]; // Устанавливаем ссылку на объект отдела
-                }
-            }
-
-            // Добавляем созданные позиции к сотрудникам
-            foreach (var emp in employees)
+                Id = 1,
+                EmployeeId = employees[0].Id,
+                Employee = employees[0],
+                PositionId = positionList[0].Id,
+                Position = positionList[0],
+                EmploymentDate = DateTime.Now,
+                RetirementDate = null
+            },
+            new EmployeePosition
             {
-                var empPosition = employeePositionList.FirstOrDefault(ep => ep.EmployeeId == emp.Id);
-                if (empPosition != null)
-                {
-                    emp.EmployeePositions.Add(empPosition); // Добавляем позицию к сотруднику
-                }
-            }
-
-            // Добавляем позиции к должностям
-            foreach (var pos in positionList)
+                Id = 2,
+                EmployeeId = employees[1].Id,
+                Employee = employees[1],
+                PositionId = positionList[1].Id,
+                Position = positionList[1],
+                EmploymentDate = DateTime.Now,
+                RetirementDate = null
+            },
+            new EmployeePosition
             {
-                var posEmployees = employeePositionList.Where(ep => ep.PositionId == pos.Id);
-                foreach (var empPos in posEmployees)
-                {
-                    pos.EmployeePositions.Add(empPos); // Добавляем позицию к должности
-                }
+                Id = 3,
+                EmployeeId = employees[2].Id,
+                Employee = employees[2],
+                PositionId = positionList[2].Id,
+                Position = positionList[2],
+                EmploymentDate = DateTime.Now,
+                RetirementDate = null
+            },
+            new EmployeePosition
+            {
+                Id = 4,
+                EmployeeId = employees[3].Id,
+                Employee = employees[3],
+                PositionId = positionList[3].Id,
+                Position = positionList[3],
+                EmploymentDate = DateTime.Now,
+                RetirementDate = null
             }
-
-            return employees; // Возвращаем список сотрудников
+        };
+            employees[0].EmployeePositions.Add(employeePositionList[0]);
+            employees[1].EmployeePositions.Add(employeePositionList[1]);
+            employees[2].EmployeePositions.Add(employeePositionList[2]);
+            employees[3].EmployeePositions.Add(employeePositionList[3]);
+            positionList[0].EmployeePositions.Add(employeePositionList[0]);
+            positionList[1].EmployeePositions.Add(employeePositionList[1]);
+            positionList[2].EmployeePositions.Add(employeePositionList[2]);
+            positionList[3].EmployeePositions.Add(employeePositionList[3]);
+            return employees;
         }
     }
     /// <summary>
