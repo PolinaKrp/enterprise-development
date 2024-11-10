@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRDepartment.Domain", "HRDepartment.Domain\HRDepartment.Domain.csproj", "{C88CF1A6-871C-4417-98FD-B297E006FCEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRDepartment.Domain", "HRDepartment.Domain\HRDepartment.Domain.csproj", "{C88CF1A6-871C-4417-98FD-B297E006FCEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRDepartment.Domain.UnitTest", "HRDepartment.Domain.UnitTest\HRDepartment.Domain.UnitTest.csproj", "{FD2C300C-995A-4269-A878-9913639EF96D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRDepartment.Domain.UnitTest", "HRDepartment.Domain.UnitTest\HRDepartment.Domain.UnitTest.csproj", "{FD2C300C-995A-4269-A878-9913639EF96D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRDepartment.Api", "HRDepartment.Api\HRDepartment.Api.csproj", "{9B0B1DD8-BD08-484F-8FAD-92793794940A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FD2C300C-995A-4269-A878-9913639EF96D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD2C300C-995A-4269-A878-9913639EF96D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD2C300C-995A-4269-A878-9913639EF96D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
