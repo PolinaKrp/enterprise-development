@@ -84,8 +84,6 @@ public class Employee
     /// Коллекция льгот, которые получил сотрудник (многие-ко-многим с BenefitType)
     /// </summary>
     public List<EmployeeBenefit> EmployeeBenefits { get; set; } = new List<EmployeeBenefit>();
-    //public int DepartmentId { get; set; }
-    //public Department? Department { get; set; } // Связь с объектом Department
 
     public int GetAge()
     {
