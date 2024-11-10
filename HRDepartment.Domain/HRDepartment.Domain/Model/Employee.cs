@@ -85,7 +85,7 @@ public class Employee
     /// </summary>
     public List<EmployeeBenefit> EmployeeBenefits { get; set; } = new List<EmployeeBenefit>();
     public int DepartmentId { get; set; }
-    public Department Department { get; set; } // Связь с объектом Department
+    public Department? Department { get; set; } // Связь с объектом Department
 
     public int GetAge()
     {
