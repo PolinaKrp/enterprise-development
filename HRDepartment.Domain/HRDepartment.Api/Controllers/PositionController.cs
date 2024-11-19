@@ -15,13 +15,7 @@ public class PositionController : ControllerBase
 {
     private readonly PositionService _positionService;
 
-    /// <summary>
-    /// Инициализирует новый экземпляр контроллера должностей.
-    /// </summary>
-    public PositionController(PositionService positionService)
-    {
-        _positionService = positionService; 
-    }
+    public PositionController(PositionService positionService) => _positionService = positionService;
 
     /// <summary>
     /// Получает список всех должностей на предприятии.

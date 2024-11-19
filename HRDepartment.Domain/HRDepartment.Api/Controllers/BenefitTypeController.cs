@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HRDepartment.Api.Dto;
-using HRDepartment.Api.Service; 
+using HRDepartment.Api.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRDepartment.Api.Controllers;
@@ -13,12 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class BenefitTypeController : ControllerBase
 {
-    private readonly BenefitTypeService _service; 
+    private readonly BenefitTypeService _service;
 
-    public BenefitTypeController(BenefitTypeService service)
-    {
-        _service = service; 
-    }
+    public BenefitTypeController(BenefitTypeService service) => _service = service;
 
     /// <summary>
     /// Получает список всех типов льгот.
@@ -56,7 +53,7 @@ public class BenefitTypeController : ControllerBase
         }
 
         var newId = _service.Post(postDto);
-        var createdBenefitTypeDto = _service.GetById(newId); 
+        var createdBenefitTypeDto = _service.GetById(newId);
         return CreatedAtAction(nameof(Get), new { id = newId }, createdBenefitTypeDto);
     }
 

@@ -15,13 +15,7 @@ public class WorkshopController : ControllerBase
 {
     private readonly WorkshopService _workshopService;
 
-    /// <summary>
-    /// Инициализирует новый экземпляр контроллера цехов.
-    /// </summary>
-    public WorkshopController(WorkshopService workshopService)
-    {
-        _workshopService = workshopService;
-    }
+    public WorkshopController(WorkshopService workshopService) => _workshopService = workshopService;
 
     /// <summary>
     /// Получает список всех цехов на предприятии.

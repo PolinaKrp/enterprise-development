@@ -13,15 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class EmployeeBenefitController : ControllerBase
 {
-    private readonly EmployeeBenefitService _employeeBenefitService; 
+    private readonly EmployeeBenefitService _employeeBenefitService;
 
-    /// <summary>
-    /// Инициализирует новый экземпляр контроллера льгот сотрудников.
-    /// </summary>
-    public EmployeeBenefitController(EmployeeBenefitService employeeBenefitService)
-    {
-        _employeeBenefitService = employeeBenefitService; 
-    }
+    public EmployeeBenefitController(EmployeeBenefitService employeeBenefitService) => _employeeBenefitService = employeeBenefitService;
 
     /// <summary>
     /// Получает список всех льгот сотрудников.

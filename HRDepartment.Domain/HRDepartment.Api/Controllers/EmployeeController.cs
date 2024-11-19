@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HRDepartment.Api.Dto;
 using HRDepartment.Api.Service;
-using Microsoft.Extensions.Logging;
 
 namespace HRDepartment.Api.Controllers;
 
@@ -14,16 +13,8 @@ namespace HRDepartment.Api.Controllers;
 public class EmployeeController : ControllerBase
 {
     private readonly EmployeeService _employeeService;
-    private readonly ILogger<EmployeeController> _logger; 
 
-    /// <summary>
-    /// Инициализирует новый экземпляр контроллера сотрудников.
-    /// </summary>
-    public EmployeeController(EmployeeService employeeService, ILogger<EmployeeController> logger)
-    {
-        _employeeService = employeeService; 
-        _logger = logger;
-    }
+    public EmployeeController(EmployeeService employeeService) => _employeeService = employeeService;
 
     /// <summary>
     /// Получает список всех сотрудников.
@@ -46,7 +37,6 @@ public class EmployeeController : ControllerBase
         var employee = _employeeService.GetById(id);
         if (employee == null)
         {
-            _logger.LogWarning($"Сотрудник с id {id} не найден.");
             return NotFound($"Сотрудник с id {id} не найден.");
         }
         return Ok(employee);
@@ -70,9 +60,8 @@ public class EmployeeController : ControllerBase
             var createdEmployee = _employeeService.GetById(newId);
             return CreatedAtAction(nameof(Get), new { id = newId }, createdEmployee);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _logger.LogError(ex, "Ошибка при добавлении нового сотрудника.");
             return StatusCode(500, "Внутренняя ошибка сервера.");
         }
     }
@@ -92,8 +81,7 @@ public class EmployeeController : ControllerBase
         var updatedEmployee = _employeeService.Put(id, updatedEmployeeDto);
         if (updatedEmployee == null)
         {
-            _logger.LogWarning($"Сотрудник с id {id} не найден для обновления.");
-            return NotFound($"Сотрудник с id {id} не найден.");
+            return NotFound($"Сотрудник с id {id} не найден для обновления.");
         }
 
         return Ok(updatedEmployee);
@@ -105,22 +93,12 @@ public class EmployeeController : ControllerBase
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id)
     {
-        var employeeExists = _employeeService.GetById(id);
-        if (employeeExists == null)
+        if (_employeeService.GetById(id) is null)
         {
-            _logger.LogWarning($"Сотрудник с id {id} не найден для удаления.");
-            return NotFound($"Сотрудник с id {id} не найден .");
+            return NotFound($"Сотрудник с id {id} не найден.");
         }
 
-        try
-        {
-            _employeeService.Delete(id);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"Ошибка при удалении сотрудника с id {id}.");
-            return StatusCode(500, "Внутренняя ошибка сервера.");
-        }
+        _employeeService.Delete(id);
+        return NoContent();
     }
 }

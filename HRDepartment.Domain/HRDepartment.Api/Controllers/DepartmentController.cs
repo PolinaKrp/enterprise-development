@@ -13,12 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class DepartmentController : ControllerBase
 {
-    private readonly DepartmentService _departmentService; 
+    private readonly DepartmentService _departmentService;
 
-    public DepartmentController(DepartmentService departmentService)
-    {
-        _departmentService = departmentService;
-    }
+    public DepartmentController(DepartmentService departmentService) => _departmentService = departmentService;
 
     /// <summary>
     /// Получает список всех отделов.

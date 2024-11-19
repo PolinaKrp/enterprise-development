@@ -15,13 +15,7 @@ public class EmployeePositionController : ControllerBase
 {
     private readonly EmployeePositionService _employeePositionService; 
 
-    /// <summary>
-    /// Инициализирует новый экземпляр контроллера связей между сотрудниками и должностями.
-    /// </summary>
-    public EmployeePositionController(EmployeePositionService employeePositionService)
-    {
-        _employeePositionService = employeePositionService; 
-    }
+    public EmployeePositionController(EmployeePositionService employeePositionService) => _employeePositionService = employeePositionService;
 
     /// <summary>
     /// Получает список всех связей между сотрудниками и должностями.
