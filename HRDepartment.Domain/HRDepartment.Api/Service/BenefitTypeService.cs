@@ -11,8 +11,8 @@ namespace HRDepartment.Api.Service;
 /// </summary>
 public class BenefitTypeService : IService<BenefitTypeGetDto, BenefitTypePostDto>
 {
-    private readonly IRepository<BenefitType> _repository; 
-    private readonly IMapper _mapper; 
+    private readonly IRepository<BenefitType> _repository;
+    private readonly IMapper _mapper;
 
     /// <summary>
     /// Инициализирует новый экземпляр сервиса типов льгот.
@@ -61,7 +61,7 @@ public class BenefitTypeService : IService<BenefitTypeGetDto, BenefitTypePostDto
         var benefitType = _repository.GetById(id);
         if (benefitType == null)
         {
-            return null; 
+            return null;
         }
 
         benefitType.Name = putDto.Name;
