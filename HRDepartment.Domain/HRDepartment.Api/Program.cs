@@ -1,4 +1,5 @@
-using AutoMapper;
+п»їusing AutoMapper;
+using HRDepartment.Api.Dto;
 using HRDepartment.Api;
 using HRDepartment.Api.Service;
 using HRDepartment.Domain.Model;
@@ -8,10 +9,10 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Создаем экземпляр HRDepartmentData
+// РЎРѕР·РґР°РµРј СЌРєР·РµРјРїР»СЏСЂ HRDepartmentData
 var hrDepartmentData = new HRDepartmentData();
 
-// Регистрация сервисов
+// Р РµРіРёСЃС‚СЂР°С†РёСЏ РєРѕРЅС‚СЂРѕР»Р»РµСЂРѕРІ
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -20,7 +21,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-// Регистрация репозиториев
+// Р РµРіРёСЃС‚СЂР°С†РёСЏ СЂРµРїРѕР·РёС‚РѕСЂРёРµРІ
 builder.Services.AddSingleton<IRepository<BenefitType>>(new BenefitTypeRepository(hrDepartmentData.BenefitType));
 builder.Services.AddSingleton<IRepository<Department>>(new DepartmentRepository(hrDepartmentData.Department));
 builder.Services.AddSingleton<IRepository<EmployeeBenefit>>(new EmployeeBenefitRepository(hrDepartmentData.EmployeeBenefit));
@@ -29,17 +30,26 @@ builder.Services.AddSingleton<IRepository<EmployeePosition>>(new EmployeePositio
 builder.Services.AddSingleton<IRepository<Position>>(new PositionRepository(hrDepartmentData.Position));
 builder.Services.AddSingleton<IRepository<Workshop>>(new WorkshopRepository(hrDepartmentData.Workshop));
 
-// Регистрация сервисов
-builder.Services.AddScoped<BenefitTypeService>(); 
-builder.Services.AddScoped<DepartmentService>(); 
+// Р РµРіРёСЃС‚СЂР°С†РёСЏ СЃРµСЂРІРёСЃРѕРІ СЃ РёРЅС‚РµСЂС„РµР№СЃР°РјРё
+builder.Services.AddScoped<IService<BenefitTypeGetDto, BenefitTypePostDto>, BenefitTypeService>();
+builder.Services.AddScoped<IService<DepartmentGetDto, DepartmentPostDto>, DepartmentService>();
+builder.Services.AddScoped<IService<EmployeeBenefitGetDto, EmployeeBenefitPostDto>, EmployeeBenefitService>();
+builder.Services.AddScoped<IService<EmployeeGetDto, EmployeePostDto>, EmployeeService>();
+builder.Services.AddScoped<IService<EmployeePositionGetDto, EmployeePositionPostDto>, EmployeePositionService>();
+builder.Services.AddScoped<IService<PositionGetDto, PositionPostDto>, PositionService>();
+builder.Services.AddScoped<IService<WorkshopGetDto, WorkshopPostDto>, WorkshopService>();
+
+// Р РµРіРёСЃС‚СЂР°С†РёСЏ РєРѕРЅРєСЂРµС‚РЅС‹С… СЃРµСЂРІРёСЃРѕРІ, РµСЃР»Рё РѕРЅРё РЅСѓР¶РЅС‹
+builder.Services.AddScoped<BenefitTypeService>();
+builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<EmployeeBenefitService>();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<EmployeePositionService>();
-builder.Services.AddScoped<PositionService > ();
+builder.Services.AddScoped<PositionService>();
 builder.Services.AddScoped<WorkshopService>();
 
-// Регистрация AutoMapper
-builder.Services.AddAutoMapper(typeof(Mapping)); // Убедитесь, что у вас есть класс Mapping для конфигурации AutoMapper
+// Р РµРіРёСЃС‚СЂР°С†РёСЏ AutoMapper
+builder.Services.AddAutoMapper(typeof(Mapping));
 
 var app = builder.Build();
 
