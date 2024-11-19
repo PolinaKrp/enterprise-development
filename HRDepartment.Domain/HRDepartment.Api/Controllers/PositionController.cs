@@ -13,9 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class PositionController : ControllerBase
 {
-    private readonly PositionService _positionService;
+    private readonly IService<PositionGetDto, PositionPostDto> _service; 
 
-    public PositionController(PositionService positionService) => _positionService = positionService;
+    public PositionController(IService<PositionGetDto, PositionPostDto> service) => _service = service; 
 
     /// <summary>
     /// Получает список всех должностей на предприятии.
@@ -24,7 +24,7 @@ public class PositionController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<PositionGetDto>> Get()
     {
-        var positionDtos = _positionService.GetAll();
+        var positionDtos = _service.GetAll();
         return Ok(positionDtos);
     }
 
@@ -35,7 +35,7 @@ public class PositionController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<PositionGetDto> Get(int id)
     {
-        var positionDto = _positionService.GetById(id);
+        var positionDto = _service.GetById(id);
         if (positionDto == null)
         {
             return NotFound($"Должность с идентификатором {id} не найдена.");
@@ -55,8 +55,8 @@ public class PositionController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var newId = _positionService.Post(positionDto);
-        var createdPositionDto = _positionService.GetById(newId);
+        var newId = _service.Post(positionDto);
+        var createdPositionDto = _service.GetById(newId);
         return CreatedAtAction(nameof(Get), new { id = newId }, createdPositionDto);
     }
 
@@ -72,13 +72,13 @@ public class PositionController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var updatedPosition = _positionService.Put(id, updatedPositionDto);
+        var updatedPosition = _service.Put(id, updatedPositionDto);
         if (updatedPosition == null)
         {
             return NotFound($"Должность с идентификатором {id} не найдена.");
         }
 
-        return NoContent(); 
+        return NoContent();
     }
 
     /// <summary>
@@ -88,13 +88,13 @@ public class PositionController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var positionExists = _positionService.GetById(id);
+        var positionExists = _service.GetById(id);
         if (positionExists == null)
         {
             return NotFound($"Должность с идентификатором {id} не найдена.");
         }
 
-        _positionService.Delete(id);
-        return NoContent(); 
+        _service.Delete(id);
+        return NoContent();
     }
 }

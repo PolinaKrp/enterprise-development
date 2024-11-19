@@ -13,9 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class DepartmentController : ControllerBase
 {
-    private readonly DepartmentService _departmentService;
+    private readonly IService<DepartmentGetDto, DepartmentPostDto> _service;
 
-    public DepartmentController(DepartmentService departmentService) => _departmentService = departmentService;
+    public DepartmentController(IService<DepartmentGetDto, DepartmentPostDto> service) => _service = service; 
 
     /// <summary>
     /// Получает список всех отделов.
@@ -24,7 +24,7 @@ public class DepartmentController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<DepartmentGetDto>> Get()
     {
-        var departments = _departmentService.GetAll();
+        var departments = _service.GetAll();
         return Ok(departments);
     }
 
@@ -36,7 +36,7 @@ public class DepartmentController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<DepartmentGetDto> Get(int id)
     {
-        var department = _departmentService.GetById(id);
+        var department = _service.GetById(id);
         if (department == null)
         {
             return NotFound($"Отдел с идентификатором {id} не найден.");
@@ -52,37 +52,37 @@ public class DepartmentController : ControllerBase
     [HttpPost]
     public ActionResult<DepartmentGetDto> Post([FromBody] DepartmentPostDto departmentDto)
     {
-        if (!ModelState.IsValid)
+        if (departmentDto == null)
         {
-            return BadRequest(ModelState);
+            return BadRequest("Отдел не может быть null.");
         }
 
-        var newId = _departmentService.Post(departmentDto);
-        var createdDepartmentDto = _departmentService.GetById(newId); // Получаем созданный объект
+        var newId = _service.Post(departmentDto);
+        var createdDepartmentDto = _service.GetById(newId); 
         return CreatedAtAction(nameof(Get), new { id = newId }, createdDepartmentDto);
     }
 
     /// <summary>
     /// Обновляет информацию о существующем отделе.
     /// </summary>
-    /// <param name="id">Иден тификатор отдела для обновления.</param>
-    /// <param name="updatedDepartment">Обновленная информация о отделе.</param>
+    /// <param name="id">Идентификатор отдела для обновления.</param>
+    /// <param name="updatedDepartmentDto">Обновленная информация о отделе.</param>
     /// <returns>Статус 404, если отдел не найден.</returns>
     [HttpPut("{id}")]
-    public ActionResult Put(int id, [FromBody] DepartmentPostDto updatedDepartmentDto)
+    public ActionResult<DepartmentGetDto> Put(int id, [FromBody] DepartmentPostDto updatedDepartmentDto)
     {
-        if (!ModelState.IsValid)
+        if (updatedDepartmentDto == null)
         {
-            return BadRequest(ModelState);
+            return BadRequest("Отдел не может быть null.");
         }
 
-        var updatedDepartment = _departmentService.Put(id, updatedDepartmentDto);
+        var updatedDepartment = _service.Put(id, updatedDepartmentDto);
         if (updatedDepartment == null)
         {
             return NotFound($"Отдел с идентификатором {id} не найден.");
         }
 
-        return NoContent();
+        return Ok(updatedDepartment);
     }
 
     /// <summary>
@@ -93,13 +93,12 @@ public class DepartmentController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var departmentExists = _departmentService.GetById(id);
-        if (departmentExists == null)
+        var isDeleted = _service.Delete(id);
+        if (!isDeleted)
         {
             return NotFound($"Отдел с идентификатором {id} не найден.");
         }
 
-        _departmentService.Delete(id);
-        return NoContent();
+        return Ok($"Отдел с идентификатором {id} удалён.");
     }
 }

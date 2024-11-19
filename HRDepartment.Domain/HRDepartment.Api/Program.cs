@@ -39,15 +39,6 @@ builder.Services.AddScoped<IService<EmployeePositionGetDto, EmployeePositionPost
 builder.Services.AddScoped<IService<PositionGetDto, PositionPostDto>, PositionService>();
 builder.Services.AddScoped<IService<WorkshopGetDto, WorkshopPostDto>, WorkshopService>();
 
-// Регистрация конкретных сервисов, если они нужны
-builder.Services.AddScoped<BenefitTypeService>();
-builder.Services.AddScoped<DepartmentService>();
-builder.Services.AddScoped<EmployeeBenefitService>();
-builder.Services.AddScoped<EmployeeService>();
-builder.Services.AddScoped<EmployeePositionService>();
-builder.Services.AddScoped<PositionService>();
-builder.Services.AddScoped<WorkshopService>();
-
 // Регистрация AutoMapper
 builder.Services.AddAutoMapper(typeof(Mapping));
 

@@ -13,9 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class EmployeePositionController : ControllerBase
 {
-    private readonly EmployeePositionService _employeePositionService; 
+    private readonly IService<EmployeePositionGetDto, EmployeePositionPostDto> _service; 
 
-    public EmployeePositionController(EmployeePositionService employeePositionService) => _employeePositionService = employeePositionService;
+    public EmployeePositionController(IService<EmployeePositionGetDto, EmployeePositionPostDto> service) => _service = service; 
 
     /// <summary>
     /// Получает список всех связей между сотрудниками и должностями.
@@ -24,7 +24,7 @@ public class EmployeePositionController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<EmployeePositionGetDto>> Get()
     {
-        var employeePositionDtos = _employeePositionService.GetAll();
+        var employeePositionDtos = _service.GetAll();
         return Ok(employeePositionDtos);
     }
 
@@ -35,7 +35,7 @@ public class EmployeePositionController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<EmployeePositionGetDto> Get(int id)
     {
-        var employeePositionDto = _employeePositionService.GetById(id);
+        var employeePositionDto = _service.GetById(id);
         if (employeePositionDto == null)
         {
             return NotFound($"Связь между сотрудником и должностью по идентификатору {id} не найдена.");
@@ -55,8 +55,8 @@ public class EmployeePositionController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var newId = _employeePositionService.Post(employeePositionDto);
-        var createdEmployeePositionDto = _employeePositionService.GetById(newId);
+        var newId = _service.Post(employeePositionDto);
+        var createdEmployeePositionDto = _service.GetById(newId);
         return CreatedAtAction(nameof(Get), new { id = newId }, createdEmployeePositionDto);
     }
 
@@ -72,7 +72,7 @@ public class EmployeePositionController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var updatedEmployeePosition = _employeePositionService.Put(id, updatedEmployeePositionDto);
+        var updatedEmployeePosition = _service.Put(id, updatedEmployeePositionDto);
         if (updatedEmployeePosition == null)
         {
             return NotFound($"Связь между сотрудником и должностью по идентификатору {id} не найдена.");
@@ -88,13 +88,13 @@ public class EmployeePositionController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var employeePositionExists = _employeePositionService.GetById(id);
+        var employeePositionExists = _service.GetById(id);
         if (employeePositionExists == null)
         {
             return NotFound($"Связь между сотрудником и должностью по идентификатору {id} не найдена.");
         }
 
-        _employeePositionService.Delete(id);
-        return NoContent(); 
+        _service.Delete(id);
+        return NoContent();
     }
 }

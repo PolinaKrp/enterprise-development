@@ -13,9 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class BenefitTypeController : ControllerBase
 {
-    private readonly BenefitTypeService _service;
+    private readonly IService<BenefitTypeGetDto, BenefitTypePostDto> _service;
 
-    public BenefitTypeController(BenefitTypeService service) => _service = service;
+    public BenefitTypeController(IService<BenefitTypeGetDto, BenefitTypePostDto> service) => _service = service;
 
     /// <summary>
     /// Получает список всех типов льгот.

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HRDepartment.Api.Dto;
-using HRDepartment.Api.Service; 
+using HRDepartment.Api.Service;
 using System.Collections.Generic;
 
 namespace HRDepartment.Api.Controllers;
@@ -13,9 +13,9 @@ namespace HRDepartment.Api.Controllers;
 [ApiController]
 public class EmployeeBenefitController : ControllerBase
 {
-    private readonly EmployeeBenefitService _employeeBenefitService;
+    private readonly IService<EmployeeBenefitGetDto, EmployeeBenefitPostDto> _service; 
 
-    public EmployeeBenefitController(EmployeeBenefitService employeeBenefitService) => _employeeBenefitService = employeeBenefitService;
+    public EmployeeBenefitController(IService<EmployeeBenefitGetDto, EmployeeBenefitPostDto> service) => _service = service; 
 
     /// <summary>
     /// Получает список всех льгот сотрудников.
@@ -24,7 +24,7 @@ public class EmployeeBenefitController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<EmployeeBenefitGetDto>> Get()
     {
-        var employeeBenefits = _employeeBenefitService.GetAll();
+        var employeeBenefits = _service.GetAll();
         return Ok(employeeBenefits);
     }
 
@@ -36,7 +36,7 @@ public class EmployeeBenefitController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<EmployeeBenefitGetDto> Get(int id)
     {
-        var employeeBenefit = _employeeBenefitService.GetById(id);
+        var employeeBenefit = _service.GetById(id);
         if (employeeBenefit == null)
         {
             return NotFound($"Льгота с идентификатором {id} не найдена.");
@@ -57,8 +57,8 @@ public class EmployeeBenefitController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var newId = _employeeBenefitService.Post(employeeBenefitDto);
-        var createdEmployeeBenefitDto = _employeeBenefitService.GetById(newId); 
+        var newId = _service.Post(employeeBenefitDto);
+        var createdEmployeeBenefitDto = _service.GetById(newId);
         return CreatedAtAction(nameof(Get), new { id = newId }, createdEmployeeBenefitDto);
     }
 
@@ -76,7 +76,7 @@ public class EmployeeBenefitController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var updatedEmployeeBenefit = _employeeBenefitService.Put(id, updatedEmployeeBenefitDto);
+        var updatedEmployeeBenefit = _service.Put(id, updatedEmployeeBenefitDto);
         if (updatedEmployeeBenefit == null)
         {
             return NotFound($"Льгота с идентификатором {id} не найдена.");
@@ -93,13 +93,13 @@ public class EmployeeBenefitController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var employeeBenefitExists = _employeeBenefitService.GetById(id);
+        var employeeBenefitExists = _service.GetById(id);
         if (employeeBenefitExists == null)
         {
             return NotFound($"Льгота с идентификатором {id} не найдена.");
         }
 
-        _employeeBenefitService.Delete(id);
+        _service.Delete(id);
         return NoContent();
     }
 }
