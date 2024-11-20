@@ -11,19 +11,16 @@ namespace HRDepartment.Api.Controllers;
 /// </summary>
 [Route("[controller]")]
 [ApiController]
-public class BenefitTypeController : ControllerBase
+
+public class BenefitTypeController(IService<BenefitTypeGetDto, BenefitTypePostDto> service) : ControllerBase
 {
-    private readonly IService<BenefitTypeGetDto, BenefitTypePostDto> _service;
-
-    public BenefitTypeController(IService<BenefitTypeGetDto, BenefitTypePostDto> service) => _service = service;
-
-    /// <summary>
-    /// Получает список всех типов льгот.
-    /// </summary>
+    ///// <summary>
+    ///// Получает список всех типов льгот.
+    ///// </summary>
     [HttpGet]
     public ActionResult<IEnumerable<BenefitTypeGetDto>> Get()
     {
-        var benefitTypes = _service.GetAll();
+        var benefitTypes = service.GetAll();
         return Ok(benefitTypes);
     }
 
@@ -33,7 +30,7 @@ public class BenefitTypeController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<BenefitTypeGetDto> Get(int id)
     {
-        var benefitType = _service.GetById(id);
+        var benefitType = service.GetById(id);
         if (benefitType == null)
         {
             return NotFound($"Тип льготы с идентификатором {id} не найден.");
@@ -52,8 +49,8 @@ public class BenefitTypeController : ControllerBase
             return BadRequest("Тип льготы не может быть null.");
         }
 
-        var newId = _service.Post(postDto);
-        var createdBenefitTypeDto = _service.GetById(newId);
+        var newId = service.Post(postDto);
+        var createdBenefitTypeDto = service.GetById(newId);
         return CreatedAtAction(nameof(Get), new { id = newId }, createdBenefitTypeDto);
     }
 
@@ -68,7 +65,7 @@ public class BenefitTypeController : ControllerBase
             return BadRequest("Тип льготы не может быть null.");
         }
 
-        var updatedBenefitType = _service.Put(id, putDto);
+        var updatedBenefitType = service.Put(id, putDto);
         if (updatedBenefitType == null)
         {
             return NotFound($"Тип льготы с идентификатором {id} не найден.");
@@ -83,7 +80,7 @@ public class BenefitTypeController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var isDeleted = _service.Delete(id);
+        var isDeleted = service.Delete(id);
         if (!isDeleted)
         {
             return NotFound($"Тип льготы с идентификатором {id} не найден.");

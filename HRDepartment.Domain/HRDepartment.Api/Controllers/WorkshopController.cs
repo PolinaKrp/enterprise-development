@@ -11,12 +11,8 @@ namespace HRDepartment.Api.Controllers;
 /// </summary>
 [Route("[controller]")]
 [ApiController]
-public class WorkshopController : ControllerBase
+public class WorkshopController(IService<WorkshopGetDto, WorkshopPostDto> service) : ControllerBase
 {
-    private readonly IService<WorkshopGetDto, WorkshopPostDto> _service; 
-
-    public WorkshopController(IService<WorkshopGetDto, WorkshopPostDto> service) => _service = service; 
-
     /// <summary>
     /// Получает список всех цехов на предприятии.
     /// </summary>
@@ -24,7 +20,7 @@ public class WorkshopController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<WorkshopGetDto>> Get()
     {
-        var workshopDtos = _service.GetAll();
+        var workshopDtos = service.GetAll();
         return Ok(workshopDtos);
     }
 
@@ -35,7 +31,7 @@ public class WorkshopController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<WorkshopGetDto> Get(int id)
     {
-        var workshopDto = _service.GetById(id);
+        var workshopDto = service.GetById(id);
         if (workshopDto == null)
         {
             return NotFound($"Цех с идентификатором {id} не найден.");
@@ -55,8 +51,8 @@ public class WorkshopController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var newId = _service.Post(workshopDto);
-        var createdWorkshopDto = _service.GetById(newId);
+        var newId = service.Post(workshopDto);
+        var createdWorkshopDto = service.GetById(newId);
         return CreatedAtAction(nameof(Get), new { id = newId }, createdWorkshopDto);
     }
 
@@ -72,7 +68,7 @@ public class WorkshopController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var updatedWorkshop = _service.Put(id, updatedWorkshopDto);
+        var updatedWorkshop = service.Put(id, updatedWorkshopDto);
         if (updatedWorkshop == null)
         {
             return NotFound($"Цех с идентификатором {id} не найден.");
@@ -89,13 +85,13 @@ public class WorkshopController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var workshopExists = _service.GetById(id);
+        var workshopExists = service.GetById(id);
         if (workshopExists == null)
         {
             return NotFound($"Цех с идентификатором {id} не найден.");
         }
 
-        _service.Delete(id);
+        service.Delete(id);
         return NoContent();
     }
 }

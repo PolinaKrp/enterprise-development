@@ -11,12 +11,8 @@ namespace HRDepartment.Api.Controllers;
 /// </summary>
 [Route("[controller]")]
 [ApiController]
-public class DepartmentController : ControllerBase
-{
-    private readonly IService<DepartmentGetDto, DepartmentPostDto> _service;
-
-    public DepartmentController(IService<DepartmentGetDto, DepartmentPostDto> service) => _service = service; 
-
+public class DepartmentController(IService<DepartmentGetDto, DepartmentPostDto> service) : ControllerBase
+{  
     /// <summary>
     /// Получает список всех отделов.
     /// </summary>
@@ -24,7 +20,7 @@ public class DepartmentController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<DepartmentGetDto>> Get()
     {
-        var departments = _service.GetAll();
+        var departments = service.GetAll();
         return Ok(departments);
     }
 
@@ -36,7 +32,7 @@ public class DepartmentController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<DepartmentGetDto> Get(int id)
     {
-        var department = _service.GetById(id);
+        var department = service.GetById(id);
         if (department == null)
         {
             return NotFound($"Отдел с идентификатором {id} не найден.");
@@ -57,8 +53,8 @@ public class DepartmentController : ControllerBase
             return BadRequest("Отдел не может быть null.");
         }
 
-        var newId = _service.Post(departmentDto);
-        var createdDepartmentDto = _service.GetById(newId); 
+        var newId = service.Post(departmentDto);
+        var createdDepartmentDto = service.GetById(newId); 
         return CreatedAtAction(nameof(Get), new { id = newId }, createdDepartmentDto);
     }
 
@@ -76,7 +72,7 @@ public class DepartmentController : ControllerBase
             return BadRequest("Отдел не может быть null.");
         }
 
-        var updatedDepartment = _service.Put(id, updatedDepartmentDto);
+        var updatedDepartment = service.Put(id, updatedDepartmentDto);
         if (updatedDepartment == null)
         {
             return NotFound($"Отдел с идентификатором {id} не найден.");
@@ -93,7 +89,7 @@ public class DepartmentController : ControllerBase
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        var isDeleted = _service.Delete(id);
+        var isDeleted = service.Delete(id);
         if (!isDeleted)
         {
             return NotFound($"Отдел с идентификатором {id} не найден.");

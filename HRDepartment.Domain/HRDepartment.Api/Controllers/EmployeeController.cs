@@ -11,12 +11,8 @@ namespace HRDepartment.Api.Controllers;
 /// </summary>
 [Route("[controller]")]
 [ApiController]
-public class EmployeeController : ControllerBase
+public class EmployeeController(IService<EmployeeGetDto, EmployeePostDto> service) : ControllerBase
 {
-    private readonly IService<EmployeeGetDto, EmployeePostDto> _service; 
-
-    public EmployeeController(IService<EmployeeGetDto, EmployeePostDto> service) => _service = service; 
-
     /// <summary>
     /// Получает список всех сотрудников.
     /// </summary>
@@ -24,7 +20,7 @@ public class EmployeeController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<EmployeeGetDto>> Get()
     {
-        var employees = _service.GetAll();
+        var employees = service.GetAll();
         return Ok(employees);
     }
 
@@ -35,7 +31,7 @@ public class EmployeeController : ControllerBase
     [HttpGet("{id:int}")]
     public ActionResult<EmployeeGetDto> Get(int id)
     {
-        var employee = _service.GetById(id);
+        var employee = service.GetById(id);
         if (employee == null)
         {
             return NotFound($"Сотрудник с id {id} не найден.");
@@ -57,13 +53,13 @@ public class EmployeeController : ControllerBase
 
         try
         {
-            var newId = _service.Post(employeeDto);
-            var createdEmployee = _service.GetById(newId);
+            var newId = service.Post(employeeDto);
+            var createdEmployee = service.GetById(newId);
             return CreatedAtAction(nameof(Get), new { id = newId }, createdEmployee);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return StatusCode(500, "Внутренняя ошибка сервера.");
+            return StatusCode(500, $"Внутренняя ошибка сервера: {ex.Message}");
         }
     }
 
@@ -79,7 +75,7 @@ public class EmployeeController : ControllerBase
             return BadRequest("Обновленный сотрудник не может быть null.");
         }
 
-        var updatedEmployee = _service.Put(id, updatedEmployeeDto);
+        var updatedEmployee = service.Put(id, updatedEmployeeDto);
         if (updatedEmployee == null)
         {
             return NotFound($"Сотрудник с id {id} не найден для обновления.");
@@ -94,12 +90,12 @@ public class EmployeeController : ControllerBase
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id)
     {
-        if (_service.GetById(id) is null)
+        if (service.GetById(id) is null)
         {
             return NotFound($"Сотрудник с id {id} не найден.");
         }
 
-        _service.Delete(id);
+        service.Delete(id);
         return NoContent();
     }
 }
