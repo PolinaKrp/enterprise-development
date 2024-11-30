@@ -6,6 +6,9 @@ using HRDepartment.Domain.Model;
 using HRDepartment.Domain.Repositories;
 using HRDepartment.Domain.UnitTest;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using HRDepartment.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,8 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
+
+builder.Services.AddDbContext<HRDepartmentContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySQL"), new MySqlServerVersion(new Version(8, 0, 39))));
 
 // Регистрация репозиториев
 builder.Services.AddSingleton<IRepository<BenefitType>>(new BenefitTypeRepository(hrDepartmentData.BenefitType));

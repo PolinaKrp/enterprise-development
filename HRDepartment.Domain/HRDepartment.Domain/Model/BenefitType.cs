@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRDepartment.Domain.Model
 {
     /// <summary>
     /// Класс, представляющий тип льготы
     /// </summary>
+    [Table("BenefitTypes")]
     public class BenefitType
     {
         /// <summary>
         /// Уникальный идентификатор типа льготы
         /// </summary>
+        [Key]
+        [Column("BenefitTypeID")]
         public required int Id { get; set; }
 
         /// <summary>
         /// Название типа льготы
         /// </summary>
+        [Column("Name")]
+        [Required]
+        [MaxLength(100)] // Максимальная длина названия льготы
         public required string Name { get; set; }
 
         /// <summary>
