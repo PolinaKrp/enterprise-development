@@ -12,8 +12,9 @@ using HRDepartment.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Создаем экземпляр HRDepartmentData
-var hrDepartmentData = new HRDepartmentData();
+// Регистрация контекста базы данных
+builder.Services.AddDbContext<HRDepartmentContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("MySQL"), new MySqlServerVersion(new Version(8, 0, 39))));
 
 // Регистрация контроллеров
 builder.Services.AddControllers();
@@ -24,16 +25,14 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDbContext<HRDepartmentContext>(options => options.UseMySql(builder.Configuration.GetConnectionString("MySQL"), new MySqlServerVersion(new Version(8, 0, 39))));
-
 // Регистрация репозиториев
-builder.Services.AddSingleton<IRepository<BenefitType>>(new BenefitTypeRepository(hrDepartmentData.BenefitType));
-builder.Services.AddSingleton<IRepository<Department>>(new DepartmentRepository(hrDepartmentData.Department));
-builder.Services.AddSingleton<IRepository<EmployeeBenefit>>(new EmployeeBenefitRepository(hrDepartmentData.EmployeeBenefit));
-builder.Services.AddSingleton<IRepository<Employee>>(new EmployeeRepository(hrDepartmentData.EmployeeOnlyWorkshopFilledFixture));
-builder.Services.AddSingleton<IRepository<EmployeePosition>>(new EmployeePositionRepository(hrDepartmentData.EmployeePosition));
-builder.Services.AddSingleton<IRepository<Position>>(new PositionRepository(hrDepartmentData.Position));
-builder.Services.AddSingleton<IRepository<Workshop>>(new WorkshopRepository(hrDepartmentData.Workshop));
+builder.Services.AddScoped<IRepository<BenefitType>, BenefitTypeRepository>();
+builder.Services.AddScoped<IRepository<Department>, DepartmentRepository>();
+builder.Services.AddScoped<IRepository<EmployeeBenefit>, EmployeeBenefitRepository>();
+builder.Services.AddScoped<IRepository<Employee>, EmployeeRepository>();
+builder.Services.AddScoped<IRepository<EmployeePosition>, EmployeePositionRepository>();
+builder.Services.AddScoped<IRepository<Position>, PositionRepository>();
+builder.Services.AddScoped<IRepository<Workshop>, WorkshopRepository>();
 
 // Регистрация сервисов с интерфейсами
 builder.Services.AddScoped<IService<BenefitTypeGetDto, BenefitTypePostDto>, BenefitTypeService>();

@@ -7,47 +7,37 @@ namespace HRDepartment.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для работы с данными о должностях.
-/// Предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление) с должностями.
 /// </summary>
 public class PositionRepository : IRepository<Position>
 {
-    private readonly List<Position> positions; 
+    private readonly HRDepartmentContext context;
 
     /// <summary>
-    /// Инициализирует новый экземпляр репозитория с заданным списком должностей.
+    /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
     /// </summary>
-    public PositionRepository(List<Position> positionList)
+    public PositionRepository(HRDepartmentContext context)
     {
-        positions = positionList ?? throw new ArgumentNullException(nameof(positionList));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    /// <summary>
-    /// Получает все должности.
-    /// </summary>
-    public IEnumerable<Position> GetAll() => positions;
+    /// <inheritdoc />
+    public IEnumerable<Position> GetAll() => context.Positions;
 
-    /// <summary>
-    /// Получает должность по указанному идентификатору.
-    /// </summary>
-    public Position? GetById(int id) => positions.FirstOrDefault(p => p.Id == id);
+    /// <inheritdoc />
+    public Position? GetById(int id) => context.Positions.FirstOrDefault(p => p.Id == id);
 
-    /// <summary>
-    /// Добавляет новую должность в репозиторий.
-    /// </summary>
+    /// <inheritdoc />
     public int Post(Position position)
     {
         if (position == null)
             throw new ArgumentNullException(nameof(position));
 
-        var newId = positions.Count > 0 ? positions.Max(p => p.Id) + 1 : 1;
-        position.Id = newId;
-        positions.Add(position);
-        return newId;
+        context.Positions.Add(position);
+        context.SaveChanges();
+        return position.Id; 
     }
 
-    /// <summary>
-    /// Обновляет существующую должность.
-    /// </summary>
+    /// <inheritdoc />
     public bool Put(Position position)
     {
         if (position == null)
@@ -57,23 +47,21 @@ public class PositionRepository : IRepository<Position>
         if (oldValue == null)
             return false;
 
-        oldValue.Name = position.Name;
-        oldValue.DepartmentId = position.DepartmentId;
-        oldValue.Department = position.Department;
+        context.Entry(oldValue).CurrentValues.SetValues(position);
+        context.SaveChanges();
 
         return true;
     }
 
-    /// <summary>
-    /// Удаляет должность по указанному идентификатору.
-    /// </summary>
+    /// <inheritdoc />
     public bool Delete(int id)
     {
         var position = GetById(id);
         if (position == null)
             return false;
 
-        positions.Remove(position);
+        context.Positions.Remove(position);
+        context.SaveChanges();
         return true;
     }
 }
