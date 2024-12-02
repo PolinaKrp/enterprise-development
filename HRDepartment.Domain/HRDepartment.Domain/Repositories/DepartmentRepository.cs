@@ -1,7 +1,8 @@
-﻿using HRDepartment.Domain.Model;
-using HRDepartment.Domain.Repositories;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HRDepartment.Domain.Model;
 
-using System.Xml.Linq;
+namespace HRDepartment.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для управления данными отделов.
@@ -9,70 +10,52 @@ using System.Xml.Linq;
 /// </summary>
 public class DepartmentRepository : IRepository<Department>
 {
-    private readonly List<Department> departments; 
+    private readonly HRDepartmentContext context;
 
     /// <summary>
-    /// Инициализирует новый экземпляр репозитория с пустым списком отделов.
+    /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
     /// </summary>
-    public DepartmentRepository()
+    public DepartmentRepository(HRDepartmentContext context)
     {
-        departments = new List<Department>();
+        this.context = context;
     }
 
-    /// <summary>
-    /// Инициализирует новый экземпляр репозитория с заданным списком отделов.
-    /// </summary>
-    public DepartmentRepository(List<Department> departmentList)
-    {
-        departments = departmentList;
-    }
+    /// <inheritdoc />
+    public IEnumerable<Department> GetAll() => context.Departments.ToList();
 
-    /// <summary>
-    /// Получает все отделы.
-    /// </summary>
-    public IEnumerable<Department> GetAll() => departments;
+    /// <inheritdoc />
+    public Department? GetById(int id) => context.Departments.FirstOrDefault(d => d.Id == id);
 
-    /// <summary>
-    /// Получает отдел по указанному идентификатору.
-    /// </summary>
-    public Department? GetById(int id) => departments.FirstOrDefault(d => d.Id == id);
-
-    /// <summary>
-    /// Добавляет новый отдел в репозиторий.
-    /// </summary>
+    /// <inheritdoc />
     public int Post(Department department)
     {
-        var newId = departments.Count > 0 ? departments.Max(d => d.Id) + 1 : 1;
-        department.Id = newId;
-        departments.Add(department);
-        return newId;
+        context.Departments.Add(department);
+        context.SaveChanges();
+        return department.Id;
     }
 
-    /// <summary>
-    /// Обновляет существующий отдел.
-    /// </summary>
+    /// <inheritdoc />
     public bool Put(Department department)
     {
         var oldValue = GetById(department.Id);
         if (oldValue == null)
             return false;
 
-        oldValue.Name = department.Name;
-        oldValue.Positions = department.Positions;
+        context.Entry(oldValue).CurrentValues.SetValues(department);
+        context.SaveChanges();
 
         return true;
     }
 
-    /// <summary>
-    /// Удаляет отдел по указанному идентификатору.
-    /// </summary>
+    /// <inheritdoc />
     public bool Delete(int id)
     {
         var department = GetById(id);
         if (department == null)
             return false;
 
-        departments.Remove(department);
+        context.Departments.Remove(department);
+        context.SaveChanges();
         return true;
     }
 }

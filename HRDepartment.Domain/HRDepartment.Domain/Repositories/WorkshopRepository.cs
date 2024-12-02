@@ -7,47 +7,37 @@ namespace HRDepartment.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для работы с данными о цехах.
-/// Предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление) с данными о цехах.
 /// </summary>
 public class WorkshopRepository : IRepository<Workshop>
 {
-    private readonly List<Workshop> workshops; 
+    private readonly HRDepartmentContext context;
 
     /// <summary>
-    /// Инициализирует новый экземпляр репозитория с заданным списком цехов.
+    /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
     /// </summary>
-    public WorkshopRepository(List<Workshop> workshopList)
+    public WorkshopRepository(HRDepartmentContext context)
     {
-        workshops = workshopList ?? throw new ArgumentNullException(nameof(workshopList));
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    /// <summary>
-    /// Получает все цехи.
-    /// </summary>
-    public IEnumerable<Workshop> GetAll() => workshops;
+    /// <inheritdoc />
+    public IEnumerable<Workshop> GetAll() => context.Workshops;
 
-    /// <summary>
-    /// Получает цех по указанному идентификатору.
-    /// </summary>
-    public Workshop? GetById(int id) => workshops.FirstOrDefault(w => w.Id == id);
+    /// <inheritdoc />
+    public Workshop? GetById(int id) => context.Workshops.FirstOrDefault(w => w.Id == id);
 
-    /// <summary>
-    /// Добавляет новый цех в репозиторий.
-    /// </summary>
+    /// <inheritdoc />
     public int Post(Workshop workshop)
     {
         if (workshop == null)
             throw new ArgumentNullException(nameof(workshop));
 
-        var newId = workshops.Count > 0 ? workshops.Max(w => w.Id) + 1 : 1;
-        workshop.Id = newId;
-        workshops.Add(workshop);
-        return newId;
+        context.Workshops.Add(workshop);
+        context.SaveChanges();
+        return workshop.Id; 
     }
 
-    /// <summary>
-    /// Обновляет существующий цех.
-    /// </summary>
+    /// <inheritdoc />
     public bool Put(Workshop workshop)
     {
         if (workshop == null)
@@ -57,22 +47,21 @@ public class WorkshopRepository : IRepository<Workshop>
         if (oldValue == null)
             return false;
 
-        oldValue.Name = workshop.Name;
-        oldValue.Employees = workshop.Employees;
+        context.Entry(oldValue).CurrentValues.SetValues(workshop);
+        context.SaveChanges();
 
         return true;
     }
 
-    /// <summary>
-    /// Удаляет цех по указанному идентификатору.
-    /// </summary>
+    /// <inheritdoc />
     public bool Delete(int id)
     {
         var workshop = GetById(id);
         if (workshop == null)
             return false;
 
-        workshops.Remove(workshop);
+        context.Workshops.Remove(workshop);
+        context.SaveChanges();
         return true;
     }
 }

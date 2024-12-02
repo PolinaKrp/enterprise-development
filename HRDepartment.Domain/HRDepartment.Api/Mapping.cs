@@ -15,31 +15,31 @@ public class Mapping : Profile
     public Mapping()
     {
         // Настройка маппинга для BenefitType
-        CreateMap<BenefitType, BenefitTypeGetDto>();
-        CreateMap<BenefitTypePostDto, BenefitType>(); 
+        CreateMap<BenefitType, BenefitTypeGetDto>().ReverseMap();
+        CreateMap<BenefitTypePostDto, BenefitType>();
 
         // Настройка маппинга для Department
-        CreateMap<Department, DepartmentGetDto>(); 
-        CreateMap<DepartmentPostDto, Department>(); 
+        CreateMap<Department, DepartmentGetDto>().ReverseMap();
+        CreateMap<DepartmentPostDto, Department>();
 
         // Настройка маппинга для EmployeeBenefit
-        CreateMap<EmployeeBenefit, EmployeeBenefitGetDto>(); 
-        CreateMap<EmployeeBenefitPostDto, EmployeeBenefit>(); 
+        CreateMap<EmployeeBenefit, EmployeeBenefitGetDto>().ReverseMap();
+        CreateMap<EmployeeBenefitPostDto, EmployeeBenefit>();
 
         // Настройка маппинга для Employee
-        CreateMap<Employee, EmployeeGetDto>();
-        CreateMap<EmployeePostDto, Employee>(); 
+        CreateMap<Employee, EmployeeGetDto>().ReverseMap();
+        CreateMap<EmployeePostDto, Employee>();
 
         // Настройка маппинга для EmployeePosition
-        CreateMap<EmployeePosition, EmployeePositionGetDto>(); 
+        CreateMap<EmployeePosition, EmployeePositionGetDto>().ReverseMap();
         CreateMap<EmployeePositionPostDto, EmployeePosition>();
 
         // Настройка маппинга для Position
-        CreateMap<PositionPostDto, Position>(); 
-        CreateMap<Position, PositionGetDto>(); 
+        CreateMap<Position, PositionGetDto>().ReverseMap();
+        CreateMap<PositionPostDto, Position>();
 
         // Настройка маппинга для Workshop
-        CreateMap<Workshop, WorkshopGetDto>(); 
-        CreateMap<WorkshopPostDto, Workshop>(); 
+        CreateMap<Workshop, WorkshopGetDto>().ReverseMap();
+        CreateMap<WorkshopPostDto, Workshop>();
     }
 }
