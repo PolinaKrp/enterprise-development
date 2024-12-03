@@ -8,17 +8,8 @@ namespace HRDepartment.Domain.Repositories;
 /// Репозиторий для управления данными отделов.
 /// Предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление) с отделами.
 /// </summary>
-public class DepartmentRepository : IRepository<Department>
-{
-    private readonly HRDepartmentContext context;
-
-    /// <summary>
-    /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
-    /// </summary>
-    public DepartmentRepository(HRDepartmentContext context)
-    {
-        this.context = context;
-    }
+public class DepartmentRepository(HRDepartmentContext context) : IRepository<Department> 
+{ 
 
     /// <inheritdoc />
     public IEnumerable<Department> GetAll() => context.Departments.ToList();

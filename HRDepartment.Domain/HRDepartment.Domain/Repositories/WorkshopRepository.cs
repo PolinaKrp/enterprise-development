@@ -8,17 +8,8 @@ namespace HRDepartment.Domain.Repositories;
 /// <summary>
 /// Репозиторий для работы с данными о цехах.
 /// </summary>
-public class WorkshopRepository : IRepository<Workshop>
-{
-    private readonly HRDepartmentContext context;
-
-    /// <summary>
-    /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
-    /// </summary>
-    public WorkshopRepository(HRDepartmentContext context)
-    {
-        this.context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+public class WorkshopRepository(HRDepartmentContext context) : IRepository<Workshop> 
+{ 
 
     /// <inheritdoc />
     public IEnumerable<Workshop> GetAll() => context.Workshops;

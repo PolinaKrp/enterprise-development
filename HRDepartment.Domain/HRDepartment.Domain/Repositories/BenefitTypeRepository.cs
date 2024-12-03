@@ -8,17 +8,8 @@ namespace HRDepartment.Domain.Repositories;
 /// Репозиторий для работы с данными типов льгот.
 /// Предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление) с типами льгот.
 /// </summary>
-public class BenefitTypeRepository : IRepository<BenefitType>
-{
-    private readonly HRDepartmentContext context;
-
-    /// <summary>
-    /// Инициализирует новый экземпляр репозитория типов льгот.
-    /// </summary>
-    public BenefitTypeRepository(HRDepartmentContext context)
-    {
-        this.context = context;
-    }
+public class BenefitTypeRepository(HRDepartmentContext context) : IRepository<BenefitType> 
+{ 
 
     /// <inheritdoc />
     public IEnumerable<BenefitType> GetAll() => context.BenefitTypes.ToList();
