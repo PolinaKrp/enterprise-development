@@ -4,74 +4,65 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using HRDepartment.Domain.Model;
 
-namespace HRDepartment.Domain.Repositories
-{
+namespace HRDepartment.Domain.Repositories;
+
+/// <summary>
+/// Репозиторий для работы с данными о льготах сотрудников.
+/// Предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление) с льготами сотрудников.
+/// </summary>
+
+public class EmployeeBenefitRepository(HRDepartmentContext context) : IRepository<EmployeeBenefit> 
+{ 
+
     /// <summary>
-    /// Репозиторий для работы с данными о льготах сотрудников.
-    /// Предоставляет методы для выполнения операций CRUD (создание, чтение, обновление, удаление) с льготами сотрудников.
+    /// Получает все льготы сотрудников.
     /// </summary>
-    public class EmployeeBenefitRepository : IRepository<EmployeeBenefit>
+    public IEnumerable<EmployeeBenefit> GetAll() => context.EmployeeBenefits.ToList();
+
+    /// <summary>
+    /// Получает льготу сотрудника по указанному идентификатору.
+    /// </summary>
+    public EmployeeBenefit? GetById(int id) => context.EmployeeBenefits.Find(id);
+
+    /// <summary>
+    /// Добавляет новую льготу сотрудника в репозиторий.
+    /// </summary>
+    public int Post(EmployeeBenefit benefit)
     {
-        private readonly HRDepartmentContext _context;
+        context.EmployeeBenefits.Add(benefit);
+        context.SaveChanges();
+        return benefit.Id;
+    }
 
-        /// <summary>
-        /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
-        /// </summary>
-        public EmployeeBenefitRepository(HRDepartmentContext context)
-        {
-            _context = context;
-        }
+    /// <summary>
+    /// Обновляет существующую льготу сотрудника.
+    /// </summary>
+    public bool Put(EmployeeBenefit benefit)
+    {
+        var oldValue = GetById(benefit.Id);
+        if (oldValue == null)
+            return false;
 
-        /// <summary>
-        /// Получает все льготы сотрудников.
-        /// </summary>
-        public IEnumerable<EmployeeBenefit> GetAll() => _context.EmployeeBenefits.ToList();
+        oldValue.EmployeeId = benefit.EmployeeId;
+        oldValue.BenefitTypeId = benefit.BenefitTypeId;
+        oldValue.IssueDate = benefit.IssueDate;
 
-        /// <summary>
-        /// Получает льготу сотрудника по указанному идентификатору.
-        /// </summary>
-        public EmployeeBenefit? GetById(int id) => _context.EmployeeBenefits.Find(id);
+        context.EmployeeBenefits.Update(oldValue);
+        context.SaveChanges();
+        return true;
+    }
 
-        /// <summary>
-        /// Добавляет новую льготу сотрудника в репозиторий.
-        /// </summary>
-        public int Post(EmployeeBenefit benefit)
-        {
-            _context.EmployeeBenefits.Add(benefit);
-            _context.SaveChanges();
-            return benefit.Id;
-        }
+    /// <summary>
+    /// Удаляет льготу сотрудника по указанному идентификатору.
+    /// </summary>
+    public bool Delete(int id)
+    {
+        var benefit = GetById(id);
+        if (benefit == null)
+            return false;
 
-        /// <summary>
-        /// Обновляет существующую льготу сотрудника.
-        /// </summary>
-        public bool Put(EmployeeBenefit benefit)
-        {
-            var oldValue = GetById(benefit.Id);
-            if (oldValue == null)
-                return false;
-
-            oldValue.EmployeeId = benefit.EmployeeId;
-            oldValue.BenefitTypeId = benefit.BenefitTypeId;
-            oldValue.IssueDate = benefit.IssueDate;
-
-            _context.EmployeeBenefits.Update(oldValue);
-            _context.SaveChanges();
-            return true;
-        }
-
-        /// <summary>
-        /// Удаляет льготу сотрудника по указанному идентификатору.
-        /// </summary>
-        public bool Delete(int id)
-        {
-            var benefit = GetById(id);
-            if (benefit == null)
-                return false;
-
-            _context.EmployeeBenefits.Remove(benefit);
-            _context.SaveChanges();
-            return true;
-        }
+        context.EmployeeBenefits.Remove(benefit);
+        context.SaveChanges();
+        return true;
     }
 }

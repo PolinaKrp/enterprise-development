@@ -8,17 +8,8 @@ namespace HRDepartment.Domain.Repositories;
 /// <summary>
 /// Репозиторий для работы с данными о должностях.
 /// </summary>
-public class PositionRepository : IRepository<Position>
+public class PositionRepository(HRDepartmentContext context) : IRepository<Position>
 {
-    private readonly HRDepartmentContext context;
-
-    /// <summary>
-    /// Инициализирует новый экземпляр репозитория с заданным контекстом базы данных.
-    /// </summary>
-    public PositionRepository(HRDepartmentContext context)
-    {
-        this.context = context ?? throw new ArgumentNullException(nameof(context));
-    }
 
     /// <inheritdoc />
     public IEnumerable<Position> GetAll() => context.Positions;
