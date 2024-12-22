@@ -1,8 +1,6 @@
 ﻿using HRDepartment.WebApplication;
 using HRDepartment.WebApplication.Api;
 
-namespace BenefitTypeBooking.Client.API;
-
 public class HRDepartmentApiWrapper(IConfiguration configuration)
 {
     public readonly ServerApi client = new(configuration["OpenApi:ServerUrl"], new HttpClient());
