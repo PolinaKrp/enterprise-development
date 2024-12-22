@@ -69,7 +69,7 @@
 
     private void OpenEditPageAsync(BenefitTypeGetDto context)
     {
-        NavManager.NavigateTo($"benefittypes/{context.Id}");
+        NavManager.NavigateTo($"/benefit-types/{context.Id}");
     }
 
     private async Task DeleteBenefitTypeAsync(BenefitTypeGetDto context)
