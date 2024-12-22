@@ -1,5 +1,4 @@
-﻿@using HRDepartment.WebApplication.Api
-@inject IHRDepartmentApiWrapper HRDepartmentApi
+﻿@inject IHRDepartmentApiWrapper HRDepartmentApi
 
 <Modal @ref="BenefitTypeModal">
     <ModalContent Centered>
@@ -29,6 +28,7 @@
     public EventCallback OnBenefitTypeAdded { get; set; }
 
     private Modal BenefitTypeModal { get; set; } = new();
+
     private BenefitTypePostDto NewBenefitType { get; set; } = new();
 
     public async Task Show() => await BenefitTypeModal.Show();
@@ -37,8 +37,8 @@
 
     private async Task CreateBenefitTypeAsync()
     {
-        // Создание нового типа льготы
-        //await HRDepartmentApi.CreateBenefitType(NewBenefitType); // Убедитесь, что метод принимает BenefitTypePostDto
+        
+        await HRDepartmentApi.CreateBenefitType(NewBenefitType); 
         await BenefitTypeModal.Hide();
         await OnBenefitTypeAdded.InvokeAsync();
     }
