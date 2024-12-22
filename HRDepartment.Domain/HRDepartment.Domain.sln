@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRDepartment.Domain.UnitTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRDepartment.Api", "HRDepartment.Api\HRDepartment.Api.csproj", "{9B0B1DD8-BD08-484F-8FAD-92793794940A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRDepartment.WebApplication", "HRDepartment.WebApplication\HRDepartment.WebApplication.csproj", "{1B3D856C-962B-440E-963C-0BE74A58A52B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRDepartment.Client", "HRDepartment.Client\HRDepartment.Client.csproj", "{C3F69431-E566-4EDD-857B-06BFD7F9BA5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B0B1DD8-BD08-484F-8FAD-92793794940A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B3D856C-962B-440E-963C-0BE74A58A52B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B3D856C-962B-440E-963C-0BE74A58A52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B3D856C-962B-440E-963C-0BE74A58A52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B3D856C-962B-440E-963C-0BE74A58A52B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3F69431-E566-4EDD-857B-06BFD7F9BA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3F69431-E566-4EDD-857B-06BFD7F9BA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3F69431-E566-4EDD-857B-06BFD7F9BA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3F69431-E566-4EDD-857B-06BFD7F9BA5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

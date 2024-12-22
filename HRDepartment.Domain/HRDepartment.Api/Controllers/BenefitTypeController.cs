@@ -42,6 +42,8 @@ public class BenefitTypeController(IService<BenefitTypeGetDto, BenefitTypePostDt
     /// Добавляет новый тип льготы.
     /// </summary>
     [HttpPost]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
     public ActionResult<BenefitTypeGetDto> Post([FromBody] BenefitTypePostDto postDto)
     {
         if (postDto == null)

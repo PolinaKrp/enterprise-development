@@ -45,6 +45,7 @@ public class PositionController(IService<PositionGetDto, PositionPostDto> servic
     /// </summary>
     /// <returns>Статус 201 (Created) и добавленная должность.</returns>
     [HttpPost]
+    [ProducesResponseType(201)]
     public ActionResult<PositionGetDto> Post([FromBody] PositionPostDto positionDto)
     {
         if (!ModelState.IsValid)
@@ -62,6 +63,7 @@ public class PositionController(IService<PositionGetDto, PositionPostDto> servic
     /// </summary>
     /// <returns>Статус 204 No Content или 404, если должность не найдена.</returns>
     [HttpPut("{id}")]
+    [ProducesResponseType(204)]
     public ActionResult Put(int id, [FromBody] PositionPostDto updatedPositionDto)
     {
         if (!ModelState.IsValid)

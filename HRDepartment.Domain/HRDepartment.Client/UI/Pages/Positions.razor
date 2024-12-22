@@ -1,0 +1,136 @@
+﻿@page "/positions"
+
+@inject IHRDepartmentApiWrapper ApiWrapper
+@using Blazorise
+
+<h3>Positions</h3>
+
+<Button Color="Color.Primary" Clicked="ShowAddModal">Add Position</Button>
+
+@if (positions == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Department id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in positions)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.DepartmentId</td>
+                    <td>
+                        <Button Color="Color.Info" Clicked="() => ShowEditModal(item)">Edit</Button>
+                        <Button Color="Color.Danger" Clicked="() => DeletePosition(item.Id)">Delete</Button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<Modal @ref="addModal" Show="true" OnHide="HideModal" Style="background-color: white">
+    <ModalHeader>
+        <h5>@modalTitle</h5>
+    </ModalHeader>
+    <ModalBody>
+        <TextEdit @bind-Text="currentPosition.Name" Label="Position Name" Placeholder="Enter position name" />
+        <Select @bind-SelectedValue="currentPosition.DepartmentId" Label="Department">
+            @foreach (var department in departments)
+            {
+                <SelectItem Value="department.Id">@department.Name</SelectItem>
+            }
+        </Select>
+    </ModalBody>
+    <ModalFooter>
+        <Button Color="Color.Secondary" Clicked="HideModal">Cancel</Button>
+        <Button Color="Color.Primary" Clicked="SavePosition">Save</Button>
+    </ModalFooter>
+</Modal>
+
+@code {
+    private ICollection<PositionGetDto> positions;
+    private PositionPostDto currentPosition = new PositionPostDto();
+    private int editingRecordId;
+    private Modal addModal;
+    private string modalTitle;
+    private ICollection<DepartmentGetDto> departments = new List<DepartmentGetDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            positions = await ApiWrapper.GetAllPositions();
+
+            departments = await ApiWrapper.GetAllDepartments();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading positions or departments: {ex.Message}");
+        }
+    }
+
+    private async Task ShowAddModal()
+    {
+        currentPosition = new PositionPostDto();
+        modalTitle = "Add Position";
+        await addModal.Show();
+    }
+
+    private async Task ShowEditModal(PositionGetDto item)
+    {
+        if (item == null)
+        {
+            Console.WriteLine("Error: The item is null.");
+            return;
+        }
+
+        currentPosition = new PositionPostDto
+            {
+                Name = item.Name,
+                DepartmentId = item.DepartmentId
+            };
+        modalTitle = "Edit Position";
+        editingRecordId = item.Id;
+        await addModal.Show();
+    }
+
+    private async Task HideModal()
+    {
+        await addModal.Hide();
+    }
+
+    private async Task SavePosition()
+    {
+        if (!string.IsNullOrEmpty(currentPosition.Name) && currentPosition.DepartmentId > 0)
+        {
+            if (modalTitle == "Add Position")
+            {
+                await ApiWrapper.CreatePosition(currentPosition);
+            }
+            else if (modalTitle == "Edit Position")
+            {
+                await ApiWrapper.UpdatePosition(editingRecordId, currentPosition);
+            }
+
+            positions = await ApiWrapper.GetAllPositions();
+            await HideModal();
+        }
+    }
+
+    private async Task DeletePosition(int id)
+    {
+        await ApiWrapper.DeletePosition(id);
+        positions = await ApiWrapper.GetAllPositions();
+    }
+}

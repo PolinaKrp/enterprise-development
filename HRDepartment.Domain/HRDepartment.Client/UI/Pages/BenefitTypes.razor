@@ -1,0 +1,121 @@
+﻿@page "/benefittypes"
+
+@inject IHRDepartmentApiWrapper ApiWrapper
+@using Blazorise
+
+@code {
+    private ICollection<BenefitTypeGetDto> benefitTypes;
+    private BenefitTypePostDto currentBenefitType = new BenefitTypePostDto();
+    private int EditingRecordId;
+    private Modal addModal;
+    private string modalTitle;
+
+    // Загрузка списка типов льгот при инициализации компонента
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            benefitTypes = await ApiWrapper.GetAllBenefitTypes();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading benefit types: {ex.Message}");
+        }
+    }
+
+    private async Task ShowAddModal()
+    {
+        currentBenefitType = new BenefitTypePostDto();
+        modalTitle = "Add Benefit Type";
+        await addModal.Show();
+    }
+
+    private async Task ShowEditModal(BenefitTypeGetDto item)
+    {
+        currentBenefitType = new BenefitTypePostDto
+            {
+                Name = item.Name
+            };
+        modalTitle = "Edit Benefit Type";
+        EditingRecordId = item.Id;
+        await addModal.Show();
+    }
+
+    private async Task HideModal()
+    {
+        await addModal.Hide();
+    }
+
+    private async Task SaveBenefitType()
+    {
+        if (!string.IsNullOrEmpty(currentBenefitType.Name))
+        {
+            if (modalTitle == "Add Benefit Type")
+            {
+                await ApiWrapper.CreateBenefitType(currentBenefitType);
+            }
+            else if (modalTitle == "Edit Benefit Type")
+            {
+                await ApiWrapper.UpdateBenefitType(EditingRecordId, currentBenefitType);
+            }
+
+            benefitTypes = await ApiWrapper.GetAllBenefitTypes();
+            await HideModal();
+        }
+    }
+
+    private async Task DeleteBenefitType(int id)
+    {
+        await ApiWrapper.DeleteBenefitType(id);
+        benefitTypes = await ApiWrapper.GetAllBenefitTypes();
+    }
+}
+
+<h3>Benefit Types</h3>
+
+<Div class="benefit-types-grid">
+    <Button Color="Color.Primary" Clicked="ShowAddModal">Add Benefit Type</Button>
+
+    @if (benefitTypes == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in benefitTypes)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <Button Color="Color.Info" Clicked="() => ShowEditModal(item)">Edit</Button>
+                            <Button Color="Color.Danger" Clicked="() => DeleteBenefitType(item.Id)">Delete</Button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</Div>
+
+<Modal @ref="addModal" OnHide="HideModal">
+    <ModalHeader>
+        <h5>@modalTitle</h5>
+    </ModalHeader>
+    <ModalBody>
+        <TextEdit @bind-Text="currentBenefitType.Name" Label="Name" Placeholder="Enter benefit type name" />
+    </ModalBody>
+    <ModalFooter>
+        <Button Color="Color.Secondary" Clicked="HideModal">Cancel</Button>
+        <Button Color="Color.Primary" Clicked="SaveBenefitType">Save</Button>
+    </ModalFooter>
+</Modal>
