@@ -8,6 +8,7 @@ namespace HRDepartment.Api.Dto;
 /// </summary>
 public class BenefitTypePostDto
 {
+    //public required int Id { get; set; }
     /// <summary>
     /// Название типа льготы
     /// </summary>

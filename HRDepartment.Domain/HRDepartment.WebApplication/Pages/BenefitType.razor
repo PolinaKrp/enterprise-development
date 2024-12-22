@@ -1,0 +1,66 @@
+﻿@page "/benefit-types/{Id}"
+@using HRDepartment.WebApplication.Api
+
+@inject IHRDepartmentApiWrapper HRDepartmentApi
+@inject IJSRuntime JsRuntime
+
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h4>Редактировать информацию о льготе</h4>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <Button Color="Color.Primary" Clicked="UpdateBenefitTypeAsync">
+                    Сохранить
+                </Button>
+                <Button Color="Color.Danger" Clicked="DeleteBenefitTypeAsync">
+                    Удалить
+                </Button>
+                <Button Color="Color.Secondary" onclick="history.back();">
+                    Закрыть
+                </Button>
+            </Column>
+        </Row>
+    </CardHeader>
+
+    <CardBody>
+        <Field>
+            <FieldLabel>Название</FieldLabel>
+            <TextEdit @bind-Text="@CurrentBenefitType.Name" />
+        </Field>
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public string Id { get; set; } = "";
+
+    private int BenefitTypeId { get; set; }
+    private BenefitTypeGetDto CurrentBenefitType { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!int.TryParse(Id, out var id))
+            throw new Exception("Неверный идентификатор");
+        BenefitTypeId = id;
+        CurrentBenefitType = await HRDepartmentApi.GetBenefitTypeById(BenefitTypeId);
+        await base.OnInitializedAsync();
+    }
+
+    private async Task DeleteBenefitTypeAsync()
+    {
+        await HRDepartmentApi.DeleteBenefitType(BenefitTypeId);
+        await JsRuntime.InvokeVoidAsync("history.back");
+    }
+
+    private async Task UpdateBenefitTypeAsync()
+    {
+        var editedBenefitType = new BenefitTypePostDto
+            {
+                Name = CurrentBenefitType.Name
+            };
+        //await HRDepartmentApi.UpdateBenefitType(BenefitTypeId, editedBenefitType);
+        await JsRuntime.InvokeVoidAsync("history.back");
+    }
+}

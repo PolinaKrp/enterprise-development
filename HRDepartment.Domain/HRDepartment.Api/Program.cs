@@ -43,6 +43,11 @@ builder.Services.AddScoped<IService<EmployeePositionGetDto, EmployeePositionPost
 builder.Services.AddScoped<IService<PositionGetDto, PositionPostDto>, PositionService>();
 builder.Services.AddScoped<IService<WorkshopGetDto, WorkshopPostDto>, WorkshopService>();
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => {
+    policy.AllowAnyOrigin(); policy.AllowAnyMethod();
+    policy.AllowAnyHeader();
+}));
+
 // Регистрация AutoMapper
 builder.Services.AddAutoMapper(typeof(Mapping));
 
@@ -54,6 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
